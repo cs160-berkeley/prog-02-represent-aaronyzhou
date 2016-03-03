@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.aaron.congressapp.EnterZipcodeFragment">
+
+    <TextView
+        android:id="@+id/lookupStuff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:text="Look up your representatives" />
+
+    <EditText
+        android:id="@+id/zipEditText"
+        android:layout_below="@+id/lookupStuff"
+        android:inputType="number"
+        android:maxLength="5"
+        android:layout_width="400dp"
+        android:layout_height="60dp"
+        />
+
+    <Button
+        android:id="@+id/zipButton"
+        android:layout_below="@+id/zipEditText"
+        android:layout_width="400dp"
+        android:layout_height="60dp"
+        android:text="zip code"/>
+
+
+    <Button
+        android:id="@+id/locButton"
+        android:layout_below="@+id/zipButton"
+        android:layout_width="400dp"
+        android:layout_height="60sp"
+        android:text="use location"/>
+
+</RelativeLayout>
