@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">CongressApp</string>
-
+    <string name="google_app_id">cs160p2</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

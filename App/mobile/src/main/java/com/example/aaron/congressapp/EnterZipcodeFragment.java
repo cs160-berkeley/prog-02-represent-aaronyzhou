@@ -13,6 +13,18 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterApiClient;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.core.models.Tweet;
+import com.twitter.sdk.android.core.services.StatusesService;
+
+import java.util.List;
+
 public class EnterZipcodeFragment extends Fragment {
 
     public EnterZipcodeFragment() {
@@ -56,11 +68,9 @@ public class EnterZipcodeFragment extends Fragment {
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(zipcodeEditText.getWindowToken(), 0);
 
-                ((MainActivity) getActivity()).useZipCode("");
+                ((MainActivity) getActivity()).useLocation();
             }
         });
-
-
 
         return v;
     }

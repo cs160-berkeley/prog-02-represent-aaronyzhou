@@ -2,6 +2,7 @@ package com.example.aaron.congressapp;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,12 +56,22 @@ public class RepresentativeDetailFragment extends Fragment {
         if(r != null) {
             nameText.setText(r.name);
             partyText.setText(r.party);
-            billList.setText(r.bills);
-            committeeList.setText(r.comittees);
 
+            if(r.party.equals("Democrat")) {
+                partyText.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.democrat));
+            } else if(r.party.equals("Republican")) {
+                partyText.setBackgroundColor(ContextCompat.getColor(getActivity(),R.color.republican));
+            } else {
+                partyText.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.other));
+            }
 
-            int resID = getResources().getIdentifier(r.imgName, "drawable", getActivity().getPackageName());
-            repImage.setImageResource(resID);
+            NetworkUtil.getBills(r.bioguide, billList);
+            NetworkUtil.getCommittees(r.bioguide, committeeList);
+
+            //int resID = getResources().getIdentifier(r.imgName, "drawable", getActivity().getPackageName());
+            //repImage.setImageResource(resID);
+
+            NetworkUtil.displayImage(r.imgName, repImage);
         }
 
         return v;
@@ -71,4 +82,5 @@ public class RepresentativeDetailFragment extends Fragment {
     }
 
 
+    //private class
 }

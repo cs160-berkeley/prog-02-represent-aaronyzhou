@@ -3,7 +3,9 @@
     package="com.example.aaron.congressapp">
 
     <uses-feature android:name="android.hardware.type.watch" />
-
+    <uses-permission
+        android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -31,6 +33,12 @@
             android:name=".WatchToPhone"
             android:enabled="true"
             android:exported="true" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBUQRBFQBEr9RwQPk7waa0C12lK3ZVCS7g"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="674af9411d61041b59c7d9c9a97beca94af6f354" />
     </application>
 
 </manifest>

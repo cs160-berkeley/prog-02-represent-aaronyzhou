@@ -15,7 +15,7 @@ public class Representative {
     public String years;
     public String comittees;
     public String bills;
-
+    public String bioguide;
 
     public Representative(String name) {
         this.name = name;

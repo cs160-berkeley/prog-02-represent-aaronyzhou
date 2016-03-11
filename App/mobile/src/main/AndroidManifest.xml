@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.aaron.congressapp">
 
+    <uses-permission
+        android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,6 +30,15 @@
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>
         </service>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBUQRBFQBEr9RwQPk7waa0C12lK3ZVCS7g"/>
+        <meta-data
+            android:name="SUNLIGHT_API_KEY"
+            android:value="3fc2abac58d44114a7fca035026d647f"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="674af9411d61041b59c7d9c9a97beca94af6f354" />
     </application>
 
 </manifest>

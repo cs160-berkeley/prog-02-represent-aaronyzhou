@@ -26,6 +26,7 @@ public class RepGridPagerAdapter extends GridPagerAdapter {
     private List<String> names;
     private List<String> parties;
     private List<String> imgN;
+    private List<String> bioguides;
     private List<String> bills;
     private List<String> committees;
     private String zip = "";
@@ -40,13 +41,13 @@ public class RepGridPagerAdapter extends GridPagerAdapter {
         zip = z;
     }
 
-    public void setData(List<String> n, List<String> p, List<String> i, List<String> b, List<String> c, String z) {
+    public void setData(List<String> n, List<String> p, List<String> i, List<String> b) {//, List<String> c, String z) {
         names = n;
         parties = p;
         imgN = i;
-        bills = b;
-        committees = c;
-        zip = z;
+        bioguides = b;
+        //committees = c;
+        //zip = z;
         notifyDataSetChanged();
     }
 
@@ -110,7 +111,8 @@ public class RepGridPagerAdapter extends GridPagerAdapter {
                     Log.d("clock", "lololo");
 
                     Intent sendIntent = new Intent(mContext, WatchToPhone.class);
-                    sendIntent.putExtra("DATA", names.get(i1) + "#" + parties.get(i1) + "#" + bills.get(i1) + "#" + committees.get(i1) + "#" + imgN.get(i1));
+                    //sendIntent.putExtra("DATA", names.get(i1) + "#" + parties.get(i1) + "#" + bills.get(i1) + "#" + committees.get(i1) + "#" + imgN.get(i1));
+                    sendIntent.putExtra("DATA", names.get(i1)+"#"+parties.get(i1)+"#"+imgN.get(i1)+"#"+bioguides.get(i1));
                     mContext.startService(sendIntent);
 
                 }

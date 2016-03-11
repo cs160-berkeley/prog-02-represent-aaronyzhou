@@ -1,7 +1,10 @@
 package com.example.aaron.congressapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,8 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -40,6 +45,8 @@ public class RepresentativeAdapter extends BaseAdapter {
 
     public void setData(List<Representative> d) {
         data = d;
+        Log.d("oeu","soapdata");
+        notifyDataSetChanged();
     }
 
     @Override
@@ -78,7 +85,7 @@ public class RepresentativeAdapter extends BaseAdapter {
         Representative r = data.get(position);
         holder.v.setText(r.name);
         holder.ev.setText(r.email);
-        holder.tv.setText(r.tweet);
+
         holder.wv.setText(r.website);
         holder.pv.setText(r.party);
 
@@ -90,8 +97,22 @@ public class RepresentativeAdapter extends BaseAdapter {
             holder.pv.setBackgroundColor(ContextCompat.getColor(context,R.color.other));
         }
 
-        int resID = context.getResources().getIdentifier(data.get(position).imgName, "drawable", context.getPackageName());
-        holder.i.setImageResource(resID);
+        //int resID = context.getResources().getIdentifier(data.get(position).imgName, "drawable", context.getPackageName());
+        //holder.i.setImageResource(resID);
+
+
+        if(r.tweet != null) {
+            NetworkUtil.displayTweet(r.tweet, holder.tv);
+        }
+        //holder.tv.setText(r.tweet);
+
+
+        NetworkUtil.displayImage(data.get(position).imgName, holder.i);
         return convertView;
     }
+
+
+
 }
+
+

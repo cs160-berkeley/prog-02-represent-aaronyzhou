@@ -17,6 +17,8 @@
         android:layout_below="@+id/lookupStuff"
         android:inputType="number"
         android:maxLength="5"
+
+        android:text="94709"
         android:layout_width="400dp"
         android:layout_height="60dp"
         />
@@ -35,5 +37,6 @@
         android:layout_width="400dp"
         android:layout_height="60sp"
         android:text="use location"/>
+
 
 </RelativeLayout>
