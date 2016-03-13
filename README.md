@@ -2,7 +2,8 @@
 
 Aaron Zhou
 
-My representative finder.
+This is an app that allows people to find their representatives and senators. It takes either a zip code or location and displays a list of reps and senators. 
+The watch will also display the names as well as the district results for the 2012 election. 
 
 ## Demo Video
 
