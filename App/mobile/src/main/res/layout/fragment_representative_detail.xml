@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     tools:context="com.example.aaron.congressapp.RepresentativeDetailFragment">
+
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"/>
@@ -14,8 +15,8 @@
     <ImageView
         android:id="@+id/rep_image"
         android:foregroundGravity="center"
-        android:layout_width="120dp"
-        android:layout_height="120dp" />
+        android:layout_width="160dp"
+        android:layout_height="160dp" />
 
     <TextView
         android:id="@+id/rep_name"
@@ -43,6 +44,8 @@
 
     <TextView
         android:id="@+id/committee_list"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="textStart"
@@ -59,6 +62,8 @@
 
     <TextView
         android:id="@+id/bill_list"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="textStart"

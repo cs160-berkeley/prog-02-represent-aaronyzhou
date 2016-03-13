@@ -15,6 +15,7 @@
         android:text="Representatives for"/>
 
     <ListView
+        android:descendantFocusability="beforeDescendants"
         android:id="@+id/repList"
         android:layout_width="match_parent"
 

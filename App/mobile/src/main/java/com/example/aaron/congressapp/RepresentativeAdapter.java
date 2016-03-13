@@ -51,11 +51,13 @@ public class RepresentativeAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        if(data.size() == 0) return 1;
         return data.size();
     }
 
     @Override
     public Object getItem(int position) {
+        if(data.size()==0) return null;
         return data.get(position);
     }
 
@@ -66,6 +68,13 @@ public class RepresentativeAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+        if(data == null || data.size() == 0) {
+            return mInflater.inflate(R.layout.empty_cell, null);
+        }
+
+
+
         RepHolder holder;
 
         if (convertView == null || convertView.getTag() == null) {
@@ -73,7 +82,10 @@ public class RepresentativeAdapter extends BaseAdapter {
             holder = new RepHolder();
             holder.v  = (TextView) convertView.findViewById(R.id.rep_cell_name);
             holder.ev = (TextView) convertView.findViewById(R.id.rep_email);
+            //holder.ev.setFocusable(false);
+
             holder.wv = (TextView) convertView.findViewById(R.id.rep_website);
+            //holder.wv.setFocusable(false);
             holder.tv = (TextView) convertView.findViewById(R.id.rep_tweet);
             holder.pv = (TextView) convertView.findViewById(R.id.rep_party);
             holder.i = (ImageView) convertView.findViewById(R.id.rep_cell_image);

@@ -116,16 +116,6 @@ public class NetworkUtil {
 
     public static void displayImage(String url, ImageView imageView)
     {
-        /*
-        imageViews.put(imageView, url);
-        Bitmap bitmap=memoryCache.get(url);
-        if(bitmap!=null)
-            imageView.setImageBitmap(bitmap);
-        else
-        {
-            queuePhoto(url, imageView);
-            imageView.setImageResource(stub_id);
-        }*/
         try {
             Bitmap b = new ImageTask().execute(url).get();
             imageView.setImageBitmap(b);
@@ -142,10 +132,13 @@ public class NetworkUtil {
             JSONObject r = new JSONObject(s);
             JSONArray results = r.getJSONArray("results");
             String b = "";
-            for(int i=0;i<Math.max(5, results.length());i++) {
+            int c = 1;
+            for(int i=0;i<Math.min(5, results.length());i++) {
                 JSONObject jr = results.getJSONObject(i);
-                if(jr.has("short_title") && !JSONObject.NULL.equals(jr.get("short_title")))
-                    b = b + jr.getString("short_title")+"\n";
+                if(jr.has("short_title") && !JSONObject.NULL.equals(jr.get("short_title"))) {
+                    b = b + Integer.toString(c) + ". " + jr.getString("short_title") + "\n";
+                    c++;
+                }
             }
             textView.setText(b);
         } catch (Exception e) {
@@ -161,9 +154,9 @@ public class NetworkUtil {
             Log.d("abc", s);
             JSONArray results = r.getJSONArray("results");
             String b = "";
-            for(int i=0;i<Math.max(5, results.length());i++) {
+            for(int i=0;i<Math.min(5, results.length());i++) {
                 JSONObject jr = results.getJSONObject(i);
-                b = b + jr.getString("name")+"\n";
+                b = b + Integer.toString(i+1) + ". " + jr.getString("name")+"\n";
             }
             textView.setText(b);
 

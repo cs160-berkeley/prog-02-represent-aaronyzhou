@@ -1,6 +1,7 @@
 package com.example.aaron.congressapp;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,9 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
@@ -26,6 +30,7 @@ public class RepresentativeListFragment extends Fragment {
     Double la = 0d;
     RepresentativeAdapter adapter;
     ListView l;
+
 
     final ArrayList<Representative> reps = new ArrayList<>();
 
@@ -41,109 +46,45 @@ public class RepresentativeListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.rep_list, null);
 
-
         TextView t = (TextView) view.findViewById(R.id.coolId);
 
         String url = "";
+        String countyUrl = "";
+
+        String gkey = "";
+        try {
+            gkey = getActivity()
+                    .getPackageManager()
+                    .getApplicationInfo(getActivity().getPackageName(), PackageManager.GET_META_DATA)
+                    .metaData.getString("com.google.android.geo.API_KEY");
+        } catch (Exception e) {
+            Log.d("a","b");
+        }
+
         if(s.length() == 0) {
             t.setText("Representatives for your location");
-            //s = "00000";
             url = "https://congress.api.sunlightfoundation.com/legislators/locate?apikey=3fc2abac58d44114a7fca035026d647f&longitude=" + Double.toString(lo) + "&latitude=" + Double.toString(la);
+            countyUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng"+Double.toString(la)+","+Double.toString(lo)+"&key=" + gkey;
         } else {
             t.setText("Representatives for " + s);
             url = "https://congress.api.sunlightfoundation.com/legislators/locate?apikey=3fc2abac58d44114a7fca035026d647f&zip="+s;
+            countyUrl = "https://maps.googleapis.com/maps/api/geocode/json?address="+s+"&key=" + gkey;
         }
 
-        String sss = "";
+
+
         try {
-            sss = new DownloadTask().execute(url).get();
+            new DownloadTask().execute(url, countyUrl);
         } catch(Exception e)
         {
             Log.d("wtf", e.toString());
         }
-        Log.d("eueueu",sss);
-        //Intent sendIntent = new Intent(getActivity().getBaseContext(), PhoneToWatch.class);
-        //sendIntent.putExtra("DATA", sss);
-        //getActivity().startService(sendIntent);
+        //Log.d("eueueu", sss);
+
 
         l = (ListView) view.findViewById(R.id.repList);
 
-        /*
-        ArrayList<Representative> list = new ArrayList<Representative>();
-        Representative r = new Representative("Sen. John Tremain");
-        Representative rr = new Representative("Sen. Joe Camel");
-        Representative rrr = new Representative("Rep. Jax Truesight");
 
-        r.imgName = "arnold";
-        r.email = "John@john.com";
-        r.website = "john.com";
-        r.tweet = "John is now on twitter";
-        r.years = "2012-2016";
-        r.party = "Democrat";
-        r.bills = "Bill For Better Food\nCool Movie Bill";
-        r.comittees = "John's Committee\nAndroid Design Committee\nCommittee of Doom";
-
-        rr.imgName = "stallone";
-        rr.email = "Joe@joe.com";
-        rr.website = "joe.com";
-        rr.tweet = "Joe is now on twitter";
-        rr.years = "2012-2016";
-        rr.party = "Republican";
-        rr.bills = "Joe's Coffee Bill";
-        rr.comittees = "Tech Committee\nHeart Surgery Committee";
-
-        rrr.imgName = "willis";
-        rrr.email = "Jax@truesight.com";
-        rrr.website = "jaxforpresident.com";
-        rrr.tweet = "Vote me for president cuz I'm the coolest";
-        rrr.years = "1990-2012";
-        rrr.party = "Democrat";
-        rrr.bills = "Phone Bill\nBill Gates";
-        rrr.comittees = "None";
-
-
-        list.add(r);
-        list.add(rr);
-        list.add(rrr);
-
-
-        //ArrayList<String> names = new ArrayList<>();
-        //ArrayList<String> parties = new ArrayList<>();
-        //ArrayList<String> imgN = new ArrayList<>();
-
-        //names.add(r.name);
-        //names.add(rr.name);
-        //names.add(rrr.name);
-
-        //parties.add(r.party);
-        //parties.add(rr.party);
-        //parties.add(rrr.party);
-
-        //imgN.add(r.imgName);
-        //imgN.add(rr.imgName);
-        //imgN.add(rrr.imgName);
-        String du = r.name + "#" + rr.name + "#" + rrr.name + "|" + r.party + "#" + rr.party + "#" + rrr.party + "|" + r.imgName + "#" + rr.imgName + "#" + rrr.imgName + "|";
-        du = du + r.bills + "#" + rr.bills + "#" + rrr.bills + "|";
-        du = du + r.comittees + "#" + rr.comittees + "#" + rrr.comittees;
-        du = du + "|" + s;
-
-        Intent sendIntent = new Intent(getActivity().getBaseContext(), PhoneToWatch.class);
-        //sendIntent.putExtra("NAMES", names);
-        //sendIntent.putExtra("PARTIES", parties);
-        //sendIntent.putExtra("IMGN", imgN);
-        //sendIntent.putExtra("llo", "LOL");
-        sendIntent.putExtra("DATA", du);
-        getActivity().startService(sendIntent);
-
-
-
-
-
-        adapter = new RepresentativeAdapter(getActivity());
-        adapter.setData(list);
-        l.setAdapter(adapter);
-
-        */
         l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -185,7 +126,9 @@ public class RepresentativeListFragment extends Fragment {
             try {
                 Log.d("imumum", url[0]);
 
-                return NetworkUtil.downloadUrl(url[0]);
+                String r1 = NetworkUtil.downloadUrl(url[0]);
+                String r2 = NetworkUtil.downloadUrl(url[1]);
+                return "{r1:"+r1+",r2:"+r2+"}";
             } catch (Exception e) {
                 Log.d("ttttt",e.toString());
                 return "Unable to retrieve web page. URL may be invalid.";
@@ -194,38 +137,95 @@ public class RepresentativeListFragment extends Fragment {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(String result) {
-            //textView.setText(result);
-            Log.d("LOL",result);
+
             reps.clear();
             adapter = new RepresentativeAdapter(getActivity());
             try {
+
                 JSONObject r = new JSONObject(result);
-                JSONArray res = r.getJSONArray("results");
-                for(int i=0;i<res.length();i++) {
-                    JSONObject o = res.getJSONObject(i);
-                    Representative robert = new Representative(o.getString("title")+". " + o.getString("first_name")+" "+o.getString("last_name"));
-                    String party = o.getString("party");
-                    if(party.equals("D")) {
-                        robert.party = "Democrat";
-                    } else if(party.equals("R")) {
-                        robert.party = "Republican";
-                    } else {
-                        robert.party = "Independent";
+
+
+                JSONObject r2 = r.getJSONObject("r2");
+                //Log.d("oeuo",r2.toString());
+
+                String sonomo = "";
+                JSONArray r2r = r2.getJSONArray("results");
+
+                if(r2r.length() > 0) {
+                    JSONObject rosalyn = r2r.getJSONObject(0);
+                    JSONArray adc = rosalyn.getJSONArray("address_components");
+                    for (int i = 0; i < adc.length(); i++) {
+                        JSONObject lobo = adc.getJSONObject(i);
+                        JSONArray type = lobo.getJSONArray("types");
+                        if (type.getString(0).equals("administrative_area_level_2")) {
+                            sonomo = lobo.getString("long_name");
+                        }
                     }
-                    robert.website = o.getString("website");
-                    robert.email = o.getString("oc_email");
-                    //
-                    robert.bioguide = o.getString("bioguide_id");
-                    robert.years = o.getString("term_end");
-                    robert.imgName = "https://theunitedstates.io/images/congress/450x550/"+o.getString("bioguide_id")+".jpg";
-                    robert.tweet = o.getString("twitter_id");
-                    reps.add(robert);
                 }
+                Log.d("sonomo", sonomo);
+                InputStream initium = getActivity().getAssets().open("cool_election_results_2012.json");
+                BufferedReader rober = new BufferedReader(new InputStreamReader(initium));
+                StringBuilder responseStrBuilder = new StringBuilder();
+
+                String inputStr;
+                while ((inputStr = rober.readLine()) != null)
+                    responseStrBuilder.append(inputStr);
+
+                JSONObject electionResults = new JSONObject(responseStrBuilder.toString());
+
+                JSONObject momomom = new JSONObject("{obama: 0,romney: 0}");
+                if(electionResults.has(sonomo)) {
+                    momomom = electionResults.getJSONObject(sonomo);
+                }
+
+                Log.d("mon", momomom.toString());
+
+
+
+
+                JSONObject r1 = r.getJSONObject("r1");
+                JSONArray res = r1.getJSONArray("results");
+                if(res.length() > 0) {
+                    for (int i = 0; i < res.length(); i++) {
+                        JSONObject o = res.getJSONObject(i);
+                        Representative robert = new Representative(o.getString("title") + ". " + o.getString("first_name") + " " + o.getString("last_name"));
+                        String party = o.getString("party");
+                        if (party.equals("D")) {
+                            robert.party = "Democrat";
+                        } else if (party.equals("R")) {
+                            robert.party = "Republican";
+                        } else {
+                            robert.party = "Independent";
+                        }
+                        robert.website = o.getString("website");
+                        robert.email = o.getString("oc_email");
+                        //
+                        robert.bioguide = o.getString("bioguide_id");
+                        robert.years = o.getString("term_end");
+                        robert.imgName = "https://theunitedstates.io/images/congress/450x550/" + o.getString("bioguide_id") + ".jpg";
+                        robert.tweet = o.getString("twitter_id");
+                        reps.add(robert);
+                    }
+                }
+
+                Intent sendIntent = new Intent(getActivity().getBaseContext(), PhoneToWatch.class);
+
+                String allStuff = "{r0:"+result+",r3:"+momomom+",r4:\"" + sonomo+"\"}";
+
+                //Log.d("al",allStuff);
+                sendIntent.putExtra("DATA", allStuff);
+                //sendIntent.putExtra("COUNTY", sonomo);
+                //sendIntent.putExtra("POLL", momomom.toString());
+                getActivity().startService(sendIntent);
+
+
+
                 adapter.setData(reps);
                 l.setAdapter(adapter);
             } catch (Exception e) {
+                adapter.setData(reps);
+                l.setAdapter(adapter);
                 Log.d("abc", e.toString());
-                Log.d("abc","counter");
             }
         }
     }

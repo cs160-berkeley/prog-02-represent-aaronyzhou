@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -30,6 +31,9 @@ public class RepGridPagerAdapter extends GridPagerAdapter {
     private List<String> bills;
     private List<String> committees;
     private String zip = "";
+    private String county= "";
+    private double obama = 0.0;
+    private double romney = 0.0;
 
 
     public RepGridPagerAdapter(Context ctx) {
@@ -51,6 +55,18 @@ public class RepGridPagerAdapter extends GridPagerAdapter {
         notifyDataSetChanged();
     }
 
+    public void setData(List<String> n, List<String> p, List<String> i, List<String> b, String county, double obama, double romney) {
+        names = n;
+        parties = p;
+        imgN = i;
+        bioguides = b;
+        this.county = county;
+        this.obama = obama;
+        this.romney = romney;
+        notifyDataSetChanged();
+    }
+
+
     @Override
     public int getRowCount() {
         return 1;
@@ -59,6 +75,7 @@ public class RepGridPagerAdapter extends GridPagerAdapter {
     @Override
     public int getColumnCount(int i) {
         if(names == null) {return 1; }
+        if(county.length() == 0) {return names.size();}
         return names.size()+1;
     }
 
@@ -68,20 +85,29 @@ public class RepGridPagerAdapter extends GridPagerAdapter {
             final View view = LayoutInflater.from(mContext).inflate(R.layout.vote_results, viewGroup, false);
             TextView v = (TextView) view.findViewById(R.id.district);
 
-            if(zip.length() == 0) {
+            if(county.length() == 0) {
                 return view; //die without drawing
             }
 
-            v.setText(zip);
+            v.setText(county);
 
-            View dv = view.findViewById(R.id.democrat);
-            View rv = view.findViewById(R.id.republican);
-            View iv = view.findViewById(R.id.other);
+            TextView dv = (TextView) view.findViewById(R.id.democrat);
+            TextView rv = (TextView) view.findViewById(R.id.republican);
+            TextView iv = (TextView) view.findViewById(R.id.other);
+
+            TextView dva = (TextView) view.findViewById(R.id.democrat2);
+            TextView rva = (TextView) view.findViewById(R.id.republican2);
+            TextView iva = (TextView) view.findViewById(R.id.other2);
+
+
+            dva.setText(String.format("%.1f", obama));
+            rva.setText(String.format("%.1f", romney));
+            iva.setText(String.format("%.1f",(100.0-obama-romney)));
 
             Random ra = new Random();
-            int dd = ra.nextInt(80);
-            int rr = Math.min(ra.nextInt(80), 120 - dd);
-            int oo = 120 - dd - rr;
+            int dd = (int) (150.0*obama/100.0);
+            int rr = (int) (150.0*romney/100.0);
+            int oo = (int) (150.0*(100.0-obama-romney)/100.0);
 
             dv.setLayoutParams(new LinearLayout.LayoutParams(dd, 30));
             rv.setLayoutParams(new LinearLayout.LayoutParams(rr, 30));
@@ -101,9 +127,7 @@ public class RepGridPagerAdapter extends GridPagerAdapter {
             rn.setText(names.get(i1));
             rp.setText(parties.get(i1));
 
-            int resID = mContext.getResources().getIdentifier(imgN.get(i1), "drawable", mContext.getPackageName());
-
-            im.setImageResource(resID);
+            NetworkUtil.displayImage(imgN.get(i1), im);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

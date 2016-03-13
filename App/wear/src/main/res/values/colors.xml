@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="republican">#E88E8E</color>
-    <color name="democrat">#B4C3ED</color>
+    <color name="republican">#E85E5E</color>
+    <color name="democrat">#7EB0F2</color>
     <color name="other">#F0F0F0</color>
 </resources>

@@ -37,14 +37,22 @@
         android:orientation="horizontal">
 
         <View
-            android:layout_width="60dp"
+            android:layout_width="20dp"
             android:layout_height="match_parent"/>
 
-        <View
-            android:id="@+id/democrat"
-            android:background="@color/democrat"
-            android:layout_width="10dp"
+
+        <TextView
+            android:id="@+id/democrat2"
+
+            android:paddingLeft="10dp"
+            android:layout_width="50dp"
             android:layout_height="20dp"/>
+            <TextView
+                android:id="@+id/democrat"
+                android:background="@color/democrat"
+                android:paddingLeft="10dp"
+                android:layout_width="10dp"
+                android:layout_height="20dp"/>
 
     </LinearLayout>
 
@@ -55,15 +63,23 @@
         android:orientation="horizontal">
 
         <View
-            android:layout_width="60dp"
+            android:layout_width="20dp"
             android:layout_height="match_parent"/>
 
-        <View
+            <TextView
+                android:id="@+id/republican2"
+                android:paddingLeft="10dp"
+
+                android:layout_width="50dp"
+                android:layout_height="20dp"/>
+        <TextView
             android:id="@+id/republican"
+            android:paddingLeft="10dp"
             android:background="@color/republican"
             android:layout_width="10dp"
             android:layout_height="20dp"/>
 
+
     </LinearLayout>
 
     <LinearLayout
@@ -72,14 +88,22 @@
         android:orientation="horizontal">
 
         <View
-            android:layout_width="60dp"
+            android:layout_width="20dp"
             android:layout_height="match_parent"/>
 
-        <View
-            android:id="@+id/other"
-            android:background="@color/other"
-            android:layout_width="10dp"
-            android:layout_height="20dp"/>
+            <TextView
+            android:paddingLeft="10dp"
+            android:id="@+id/other2"
+            android:layout_width="50dp"
+            android:layout_height="30dp"/>
+
+            <TextView
+                android:paddingLeft="10dp"
+                android:id="@+id/other"
+                android:background="@color/other"
+                android:layout_width="10dp"
+                android:layout_height="30dp"/>
+
 
     </LinearLayout>
 

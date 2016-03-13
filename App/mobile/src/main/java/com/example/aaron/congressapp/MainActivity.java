@@ -30,9 +30,17 @@ import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.services.StatusesService;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import io.fabric.sdk.android.Fabric;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -65,19 +73,44 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null && extras.containsKey("DATA")) {
-
+        //if(true) {
             String s = extras.get("DATA").toString();
+            //String s = "RANDOM";
             if (s.equals("RANDOM")) {
-                Random r = new Random();
-                int z = r.nextInt(89999) + 10000;
-                useZipCode(Integer.toString(z));
+
+                try {
+                    InputStream initium = getAssets().open("us_postal_codes.csv");
+                    BufferedReader rober = new BufferedReader(new InputStreamReader(initium));
+                    StringBuilder responseStrBuilder = new StringBuilder();
+
+                    ArrayList<String> z = new ArrayList<>(44444);
+                    String inputStr;
+                    while ((inputStr = rober.readLine()) != null)
+                        z.add(inputStr);
+                    Random r = new Random();
+                    int results = 0;
+                    String a = "";
+                    while(results == 0) {
+                        a = z.get(r.nextInt(z.size()));
+                        String url = "https://congress.api.sunlightfoundation.com/legislators/locate?apikey=3fc2abac58d44114a7fca035026d647f&zip="+a;
+                        Integer ueu = new NT().execute(url).get();
+                        results = ueu.intValue();
+                    }
+                    useZipCode(a);
+                } catch (Exception e)
+                {
+                    Log.d("ou",e.toString());
+                }
+
+
             } else if (s != null) {
                 String[] ddd = s.split("#");
                 Representative r = new Representative(ddd[0]);
                 r.party = ddd[1];
-                r.bills = ddd[2];
-                r.comittees = ddd[3];
-                r.imgName = ddd[4];
+                //r.bills = ddd[2];
+                //r.comittees = ddd[3];
+                r.imgName = ddd[2];
+                r.bioguide = ddd[3];
                 RepresentativeDetailFragment f = new RepresentativeDetailFragment();
                 f.setRepresentative(r);
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, f).addToBackStack("cat").commit();
@@ -180,6 +213,26 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    private class NT extends AsyncTask<String, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(String... url) {
+            try {
+                Log.d("imumum", url[0]);
+
+                String r1 = NetworkUtil.downloadUrl(url[0]);
+                Log.d("eu",r1);
+                JSONObject o = new JSONObject(r1);
+                JSONArray res = o.getJSONArray("results");
+                return new Integer(res.length());
+            } catch (Exception e) {
+                Log.d("ttttt",e.toString());
+                return new Integer(0);
+            }
+        }
 
     }
 }

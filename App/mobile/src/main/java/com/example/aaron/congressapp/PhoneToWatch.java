@@ -63,6 +63,7 @@ public class PhoneToWatch extends Service {
                     mApiClient.connect();
                     //now that you're connected, send a massage with the cat name
                     sendMessage("/DATA", catName);
+
                 }
             }).start();
 
